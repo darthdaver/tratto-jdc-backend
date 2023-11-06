@@ -6,13 +6,13 @@ const cors = require('cors');
 const db = require('./config/db');
 
 // Load configuration file and environment variables
-dotenv.config({ path: "./config/config.env" });
+dotenv.config({ path: ".env" });
 
 // Connect mongodb database
 db.connect();
 
 // Allow all origin
-const allowedOrigins = ["http://localhost:5173","https://tratto-jdc.onrender.com"];
+const allowedOrigins = ["http://localhost:5173","https://tratto-jdc.onrender.com","https://tratto-jdc-api.onrender.com"];
 
 const corsOptions = {
     origin: function (origin, callback) {
