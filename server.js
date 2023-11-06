@@ -12,7 +12,12 @@ dotenv.config({ path: ".env" });
 db.connect();
 
 // Allow all origin
-const allowedOrigins = ["http://localhost:5173","https://tratto-jdc.onrender.com","https://tratto-jdc-api.onrender.com"];
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://tratto-jdc.onrender.com",
+    "https://tratto-jdc-api.onrender.com",
+    "https://star.inf.usi.ch"
+];
 
 const corsOptions = {
     origin: function (origin, callback) {

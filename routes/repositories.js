@@ -121,7 +121,7 @@ router.get(
     }
 );
 
-// Get one repository
+// Get Repository
 router.get(
     '/:idRepository',
     getRepository,
@@ -472,5 +472,58 @@ router.delete(
     }
 )
 
+// Get whole repository content
+router.get(
+    '/:idrepository/whole',
+    getRepository,
+    async (req, res) => {
+        try {
+            repository = res.repository;
+            const repositoryClasses = [];
+            for(idRepositoryClass of repository.classes) {
+                const repositoryClass = await RepositoryClass.findById(idRepositoryClass);
+                const jDoctorConditions = [];
+                for(idJDoctorCondition of repositoryClass.jDoctorConditions) {
+                    const jDoctorCondition = await JDoctorCondition.findById(idJDoctorCondition);
+                    const preConditions = [];
+                    for(idPreCondition of jDoctorCondition.pre) {
+                        const preCondition = await PreCondition.findById(idPreCondition);
+                        preConditions.push(preCondition.toJSON());
+                    }
+                    const postConditions = [];
+                    for(idPostCondition of jDoctorCondition.post) {
+                        const postCondition = await PostCondition.findById(idPostCondition);
+                        postConditions.push(postCondition.toJSON());
+                    }
+                    const throwsConditions = [];
+                    for(idThrowsCondition of jDoctorCondition.throws) {
+                        const throwsCondition = await ThrowsCondition.findById(idThrowsCondition);
+                        throwsConditions.push(throwsCondition.toJSON());
+                    }
+                    jDoctorConditions.push({
+                        ...jDoctorCondition.toJSON(),
+                        pre: preConditions,
+                        post: postConditions,
+                        throws: throwsConditions
+                    });
+                }
+                repositoryClasses.push({
+                    ...repositoryClass.toJSON(),
+                    jDoctorConditions: jDoctorConditions
+                });
+            }
+            res.json({
+                ...repository.toJSON(),
+                classes: repositoryClasses
+            });
+        } catch (e) {
+            res.status(500).json({ message: e.message });
+        }
+    }
+);
+
+router.get('exports', (req, res) => {
+
+})
 
 exports.router = router;
