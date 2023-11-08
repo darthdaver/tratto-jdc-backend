@@ -552,21 +552,5 @@ router.get(
     }
 );
 
-router.get(
-    '/:idRepository/export',
-    getRepository,
-    async (req, res) => {
-        try {
-            res.json({
-                message: "Not implemented yet."
-            });
-        } catch (e) {
-            // Handle errors here
-            console.error(e);
-            res.status(500).json({ error: e.message });
-        }
-    }
-);
-
 
 exports.router = router;

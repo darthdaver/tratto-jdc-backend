@@ -33,12 +33,14 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '100mb' }));
 
 // Setup server rest api
 app.use(express.json());
 // Setup router
 const repositoriesRouter = require('./routes/repositories').router;
 app.use('/repositories', repositoriesRouter);
+const exportRouter = require('./routes/export').router;
+app.use('/export', exportRouter);
 
 app.listen(3000);
