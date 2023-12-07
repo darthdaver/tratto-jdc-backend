@@ -167,17 +167,22 @@ router.delete(
     async (req, res) => {
         try {
             await res.repository.deleteOne();
-            for(const idRepositoryClass of res.repository.classes) {
+            for(const repositoryClassObj of res.repository.classes) {
+                const idRepositoryClass = repositoryClassObj._id;
                 const repositoryClass = await RepositoryClass.findById(idRepositoryClass);
-                for(const idJDoctorCondition of repositoryClass.jDoctorConditions) {
+                for(const jDoctorConditionObj of repositoryClass.jDoctorConditions) {
+                    const idJDoctorCondition = jDoctorConditionObj._id;
                     const jDoctorCondition = await JDoctorCondition.findById(idJDoctorCondition);
-                    for(const idPreCondition of jDoctorCondition.pre) {
+                    for(const preConditionObj of jDoctorCondition.pre) {
+                        const idPreCondition = preConditionObj._id;
                         await PreCondition.findByIdAndDelete(idPreCondition);
                     }
-                    for(const idPostCondition of jDoctorCondition.post) {
+                    for(const postConditionObj of jDoctorCondition.post) {
+                        const idPostCondition = postConditionObj._id;
                         await PostCondition.findByIdAndDelete(idPostCondition);
                     }
-                    for(const idThrowsCondition of jDoctorCondition.throws) {
+                    for(const throwsConditionObj of jDoctorCondition.throws) {
+                        const idThrowsCondition = throwsConditionObj._id;
                         await ThrowsCondition.findByIdAndDelete(idThrowsCondition);
                     }
                     await jDoctorCondition.deleteOne();
@@ -301,13 +306,16 @@ router.delete(
     async (req, res) => {
         try {
             await res.jDoctorCondition.deleteOne();
-            for(const idPreCondition of res.jDoctorCondition.pre) {
+            for(const preConditionObj of res.jDoctorCondition.pre) {
+                const idPreCondition = preConditionObj._id;
                 await PreCondition.findByIdAndDelete(idPreCondition);
             }
-            for(const idPostCondition of res.jDoctorCondition.post) {
+            for(const postConditionObj of res.jDoctorCondition.post) {
+                const idPostCondition = postConditionObj._id;
                 await PostCondition.findByIdAndDelete(idPostCondition);
             }
-            for(const idThrowsCondition of res.jDoctorCondition.throws) {
+            for(const ThrowsConditionObj of res.jDoctorCondition.throws) {
+                const idThrowsCondition = ThrowsConditionObj._id;
                 await ThrowsCondition.findByIdAndDelete(idThrowsCondition);
             }
             res.repositoryClass.jDoctorConditions = res.repositoryClass.jDoctorConditions.filter(j => j._id != req.params.idJDoctorCondition);
@@ -376,15 +384,19 @@ router.delete(
     getRepositoryClass,
     async (req, res) => {
         try {
-            for(const idJDoctorCondition of res.repositoryClass.jDoctorConditions) {
+            for(const jDoctorConditionObj of res.repositoryClass.jDoctorConditions) {
+                const idJDoctorCondition = jDoctorConditionObj._id;
                 const jDoctorCondition = await JDoctorCondition.findById(idJDoctorCondition);
-                for(const idPreCondition of jDoctorCondition.pre) {
+                for(const preConditionObj of jDoctorCondition.pre) {
+                    const idPreCondition = preConditionObj._id;
                     await PreCondition.findByIdAndDelete(idPreCondition);
                 }
-                for(const idPostCondition of jDoctorCondition.post) {
+                for(const postConditionObj of jDoctorCondition.post) {
+                    const idPostCondition = postConditionObj._id;
                     await PostCondition.findByIdAndDelete(idPostCondition);
                 }
-                for(const idThrowsCondition of jDoctorCondition.throws) {
+                for(const throwsConditionObj of jDoctorCondition.throws) {
+                    const idThrowsCondition = throwsConditionObj._id;
                     await ThrowsCondition.findByIdAndDelete(idThrowsCondition);
                 }
                 await jDoctorCondition.deleteOne();

@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const JSZip = require('jszip');
-const fs = require('fs');
 const Repository = require('../models/Repository').Repository;
 const RepositoryClass = require("../models/RepositoryClass").RepositoryClass;
 const JDoctorCondition = require("../models/JDoctorCondition").JDoctorCondition;
@@ -21,7 +20,7 @@ router.get(
                     srcPathList: ["raw", ...r.srcPathList],
                     jarPathList: ["jar"],
                     jDoctorConditionsPathList: ["conditions"]
-                } })),
+                } }), null, 4),
             };
 
             for (const repository of repositories) {
@@ -34,30 +33,33 @@ router.get(
                         const preConditions = [];
                         for (const idPreCondition of jDoctorCondition.pre) {
                             const preCondition = await PreCondition.findById(idPreCondition);
-                            preConditions.push(preCondition.toJSON());
+                            preConditions.push(preCondition);
                         }
                         const postConditions = [];
                         for (const idPostCondition of jDoctorCondition.post) {
                             const postCondition = await PostCondition.findById(idPostCondition);
-                            postConditions.push(postCondition.toJSON());
+                            postConditions.push(postCondition);
                         }
                         const throwsConditions = [];
                         for (const idThrowsCondition of jDoctorCondition.throws) {
                             const throwsCondition = await ThrowsCondition.findById(idThrowsCondition);
-                            throwsConditions.push(throwsCondition.toJSON());
+                            throwsConditions.push(throwsCondition);
                         }
 
                         jDoctorConditions.push({
-                            ...jDoctorCondition.toJSON(),
+                            source: jDoctorCondition.source,
+                            operation: jDoctorCondition.operation,
+                            identifiers: jDoctorCondition.identifiers,
                             pre: preConditions,
                             post: postConditions,
                             throws: throwsConditions
                         });
                     }
                     folderStructure[`repositories/${repository.projectName}/${repositoryClass.name}.json`] = JSON.stringify({
-                        ...repositoryClass.toJSON(),
+                        _id: repositoryClass._id,
+                        name: repositoryClass.name,
                         jDoctorConditions
-                    });
+                    }, null, 4);
                 }
             }
 
